@@ -1,0 +1,32 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background-color: #182234;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  margin: 0;
+  padding: 20px;
+  color: white;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+#scene {
+  flex: 1;
+  min-height: 0;
+}
+
+canvas {
+  display: block;
+}

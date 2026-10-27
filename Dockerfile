@@ -1,10 +1,12 @@
 FROM node:22-alpine
 
+RUN apk add --no-cache git ca-certificates
+
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 

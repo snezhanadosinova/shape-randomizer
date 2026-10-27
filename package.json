@@ -4,9 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite"
+    "dev": "vite",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "typescript": "^7.0.2",
     "vite": "^6.0.0"
   },
   "dependencies": {
