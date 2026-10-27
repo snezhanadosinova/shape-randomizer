@@ -1,6 +1,6 @@
 FROM node:22-alpine
 
-RUN apk add --no-cache git ca-certificates
+RUN apk add --no-cache git ca-certificates openssh-client
 
 WORKDIR /app
 
