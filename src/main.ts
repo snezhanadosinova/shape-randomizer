@@ -1,5 +1,6 @@
 import { Application } from "pixi.js";
 import { Circle } from "./shapes/Circle";
+import { Rectangle } from "./shapes/Rectangle";
 import "./style.css";
 
 // Initializes the PixiJS application and adds shapes to the stage.
@@ -38,13 +39,24 @@ async function init() {
 
   app.stage.addChild(smallCircle);
 
-  // Positions the circles relative to the current stage dimensions.
+  const rectangle = new Rectangle({
+    x: 0,
+    y: 0,
+    width: 120,
+    height: 80,
+    color: 0x4ecdc4,
+  });
+
+  app.stage.addChild(rectangle);
+
+  // Positions the elements relative to the current stage dimensions.
   function updateLayout(): void {
     const centerX = app.screen.width / 2;
     const centerY = app.screen.height / 2;
 
     circle.position.set(centerX, centerY);
     smallCircle.position.set(centerX + 150, centerY);
+    rectangle.position.set(centerX - 180, centerY);
   }
 
   // Updates the layout whenever the canvas is resized.
