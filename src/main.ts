@@ -1,6 +1,8 @@
-import { Application, Graphics } from "pixi.js";
+import { Application } from "pixi.js";
+import { Circle } from "./shapes/Circle";
 import "./style.css";
 
+// Initializes the PixiJS application and adds shapes to the stage.
 async function init() {
   const app = new Application();
 
@@ -18,22 +20,38 @@ async function init() {
 
   scene.appendChild(app.canvas);
 
-  const circle = new Graphics().circle(0, 0, 60).fill("#7c5cff");
+  const circle = new Circle({
+    x: app.screen.width / 2,
+    y: app.screen.height / 2,
+    radius: 60,
+    color: 0x7c5cff,
+  });
 
-  circle.position.set(app.screen.width / 2, app.screen.height / 2);
+  const smallCircle = new Circle({
+    x: app.screen.width / 2 + 150,
+    y: app.screen.height / 2,
+    radius: 30,
+    color: 0xff6b6b,
+  });
 
   app.stage.addChild(circle);
-  circle.eventMode = "static";
-  circle.cursor = "pointer";
 
-  const colors = ["#7c5cff", "#ff6b6b", "#4ecdc4", "#ffd166"];
-  let colorIndex = 0;
+  app.stage.addChild(smallCircle);
 
-  circle.on("pointertap", () => {
-    colorIndex = (colorIndex + 1) % colors.length;
+  // Positions the circles relative to the current stage dimensions.
+  function updateLayout(): void {
+    const centerX = app.screen.width / 2;
+    const centerY = app.screen.height / 2;
 
-    circle.clear().circle(0, 0, 60).fill(colors[colorIndex]);
-  });
+    circle.position.set(centerX, centerY);
+    smallCircle.position.set(centerX + 150, centerY);
+  }
+
+  // Updates the layout whenever the canvas is resized.
+  app.renderer.on("resize", updateLayout);
+
+  // Applies the initial layout.
+  updateLayout();
 }
 
 init().catch(console.error);
