@@ -22,19 +22,21 @@ async function init(): Promise<void> {
 
   const shape = createRandomShape();
 
+  const bounds = shape.getLocalBounds();
+
+  const minX = -bounds.x;
+  const maxX = app.screen.width - bounds.x - bounds.width;
+
+  // Selects a random horizontal position where the shape fits.
+  const x =
+    maxX >= minX ? minX + Math.random() * (maxX - minX) : app.screen.width / 2;
+
+  // Places the entire shape just above the scene.
+  const y = -(bounds.y + bounds.height) - 1;
+
+  shape.position.set(x, y);
+
   app.stage.addChild(shape);
-
-  // Centers the shape within the current stage dimensions.
-  function updateLayout(): void {
-    shape.position.set(
-      app.screen.width / 2,
-      app.screen.height / 2,
-    );
-  }
-
-  app.renderer.on("resize", updateLayout);
-
-  updateLayout();
 }
 
 init().catch(console.error);
