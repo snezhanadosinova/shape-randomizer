@@ -38,13 +38,15 @@ async function init(): Promise<void> {
 
   app.stage.addChild(shape);
 
-  const fallSpeed = 120;
+  const gravity = 180;
+  let velocityY = 0;
 
-  // Moves the shape downward at 120 pixels per second.
+  // Accelerates the shape downward and updates its position.
   app.ticker.add((ticker) => {
     const deltaSeconds = ticker.deltaMS / 1000;
 
-    shape.y += fallSpeed * deltaSeconds;
+    velocityY += gravity * deltaSeconds;
+    shape.y += velocityY * deltaSeconds;
   });
 }
 
