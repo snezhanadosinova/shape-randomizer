@@ -37,7 +37,7 @@ Open [localhost:5173](http://localhost:5173).
 Check TypeScript types:
 
 ```bash
-docker compose exec reevo-app npm run typecheck
+docker compose exec app npm run typecheck
 ```
 
 Stop:
