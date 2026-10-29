@@ -19,7 +19,7 @@ export class Ellipse extends Shape {
     this.draw();
   }
 
-  // Redraws the circle around its local origin.
+  // Redraws the ellipse around its local origin.
   protected override draw(): void {
     this.clear();
     this.ellipse(0, 0, this.radiusX, this.radiusY);
