@@ -88,6 +88,21 @@ async function init(): Promise<void> {
     }
   }
 
+  // Removes a tracked shape and releases its resources.
+  function removeShape(shape: Shape): void {
+    const index = fallingShapes.findIndex((item) => item.shape === shape);
+
+    if (index === -1) {
+      return;
+    }
+
+    fallingShapes.splice(index, 1);
+    shape.removeFromParent();
+    shape.destroy();
+
+    updateShapeCount();
+  }
+
   const gravity = 180;
   const creationInterval = 0.5;
   let timeSinceLastCreation = 0;
@@ -114,6 +129,12 @@ async function init(): Promise<void> {
       shape,
       velocityY: 0,
     });
+
+    // Removes the clicked shape and prevents the event from bubbling.
+    shape.on("pointertap", (event) => {
+      event.stopPropagation();
+      removeShape(shape);
+    });
   }
 
   // Generates shapes at regular intervals and updates their movement.
@@ -138,9 +159,7 @@ async function init(): Promise<void> {
       const topY = item.shape.y + bounds.y;
 
       if (topY > app.screen.height) {
-        fallingShapes.splice(i, 1);
-        item.shape.removeFromParent();
-        item.shape.destroy();
+        removeShape(item.shape);
       }
     }
 
