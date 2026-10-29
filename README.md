@@ -1,4 +1,4 @@
-# Reevo Shapes
+# REEVO Shape Lab
 
 Interactive falling shapes built with **TypeScript, PixiJS, Vite, and Docker**.
 
