@@ -1,4 +1,4 @@
-# REEVO Shape Lab
+# Shape Randomizer
 
 Interactive falling shapes built with **TypeScript, PixiJS, Vite, and Docker**.
 
