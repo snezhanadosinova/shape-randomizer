@@ -1,4 +1,4 @@
-import { Application } from "pixi.js";
+import { Application, Container, Graphics } from "pixi.js";
 import { createRandomShape } from "./shapes/createRandomShape";
 import type { Shape } from "./shapes/Shape";
 import "./style.css";
@@ -25,6 +25,26 @@ async function init(): Promise<void> {
   });
 
   scene.appendChild(app.canvas);
+
+  // Creates a container for the shapes and a mask to limit their visibility.
+  const shapesContainer = new Container();
+  const sceneMask = new Graphics();
+
+  app.stage.addChild(shapesContainer);
+  app.stage.addChild(sceneMask);
+
+  shapesContainer.mask = sceneMask;
+
+  // Matches the visible area to the current scene dimensions.
+  function updateMask(): void {
+    sceneMask.clear();
+    sceneMask.rect(0, 0, app.screen.width, app.screen.height);
+    sceneMask.fill(0xffffff);
+  }
+
+  app.renderer.on("resize", updateMask);
+
+  updateMask();
 
   const currentNumber =
     document.querySelector<HTMLSpanElement>("#currentNumber");
@@ -88,7 +108,7 @@ async function init(): Promise<void> {
     const y = -(bounds.y + bounds.height) - 1;
 
     shape.position.set(x, y);
-    app.stage.addChild(shape);
+    shapesContainer.addChild(shape);
 
     fallingShapes.push({
       shape,
