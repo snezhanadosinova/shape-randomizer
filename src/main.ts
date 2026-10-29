@@ -1,6 +1,12 @@
 import { Application } from "pixi.js";
 import { createRandomShape } from "./shapes/createRandomShape";
+import type { Shape } from "./shapes/Shape";
 import "./style.css";
+
+interface FallingShape {
+  shape: Shape;
+  velocityY: number;
+}
 
 // Initializes the application and displays a random shape.
 async function init(): Promise<void> {
@@ -20,34 +26,54 @@ async function init(): Promise<void> {
 
   scene.appendChild(app.canvas);
 
-  const shape = createRandomShape();
-
-  const bounds = shape.getLocalBounds();
-
-  const minX = -bounds.x;
-  const maxX = app.screen.width - bounds.x - bounds.width;
-
-  // Selects a random horizontal position where the shape fits.
-  const x =
-    maxX >= minX ? minX + Math.random() * (maxX - minX) : app.screen.width / 2;
-
-  // Places the entire shape just above the scene.
-  const y = -(bounds.y + bounds.height) - 1;
-
-  shape.position.set(x, y);
-
-  app.stage.addChild(shape);
+  const fallingShapes: FallingShape[] = [];
 
   const gravity = 180;
-  let velocityY = 0;
+  const creationInterval = 1;
+  let timeSinceLastCreation = 0;
 
-  // Accelerates the shape downward and updates its position.
+  // Creates a shape above the scene at a random horizontal position.
+  function createShape(): void {
+    const shape = createRandomShape();
+    const bounds = shape.getLocalBounds();
+
+    const minX = -bounds.x;
+    const maxX = app.screen.width - bounds.x - bounds.width;
+
+    const x =
+      maxX >= minX
+        ? minX + Math.random() * (maxX - minX)
+        : app.screen.width / 2;
+
+    const y = -(bounds.y + bounds.height) - 1;
+
+    shape.position.set(x, y);
+    app.stage.addChild(shape);
+
+    fallingShapes.push({
+      shape,
+      velocityY: 0,
+    });
+  }
+
+  // Generates shapes at regular intervals and updates their movement.
   app.ticker.add((ticker) => {
     const deltaSeconds = ticker.deltaMS / 1000;
 
-    velocityY += gravity * deltaSeconds;
-    shape.y += velocityY * deltaSeconds;
+    timeSinceLastCreation += deltaSeconds;
+
+    while (timeSinceLastCreation >= creationInterval) {
+      createShape();
+      timeSinceLastCreation -= creationInterval;
+    }
+
+    for (const item of fallingShapes) {
+      item.velocityY += gravity * deltaSeconds;
+      item.shape.y += item.velocityY * deltaSeconds;
+    }
   });
+
+  createShape();
 }
 
 init().catch(console.error);
