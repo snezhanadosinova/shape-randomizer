@@ -8,7 +8,7 @@ interface FallingShape {
   velocityY: number;
 }
 
-// Initializes the application and displays a random shape.
+// Initializes the application and sets up the scene, shapes, and interactions.
 async function init(): Promise<void> {
   const app = new Application();
 
@@ -45,6 +45,19 @@ async function init(): Promise<void> {
   app.renderer.on("resize", updateMask);
 
   updateMask();
+
+  app.stage.eventMode = "static";
+  app.stage.hitArea = app.screen;
+
+  // Creates a falling shape where the scene is pressed.
+  app.stage.on("pointerdown", (event) => {
+    const position = event.getLocalPosition(shapesContainer);
+
+    createShape({
+      x: position.x,
+      y: position.y,
+    });
+  });
 
   const currentNumber =
     document.querySelector<HTMLSpanElement>("#currentNumber");
@@ -104,11 +117,11 @@ async function init(): Promise<void> {
   }
 
   const gravity = 180;
-  const creationInterval = 0.5;
+  const creationInterval = 1;
   let timeSinceLastCreation = 0;
 
-  // Creates a shape above the scene at a random horizontal position.
-  function createShape(): void {
+  // Creates a shape at the given position or randomly above the scene.
+  function createShape(position?: { x: number; y: number }): void {
     const shape = createRandomShape();
     const bounds = shape.getLocalBounds();
 
@@ -116,11 +129,12 @@ async function init(): Promise<void> {
     const maxX = app.screen.width - bounds.x - bounds.width;
 
     const x =
-      maxX >= minX
+      position?.x ??
+      (maxX >= minX
         ? minX + Math.random() * (maxX - minX)
-        : app.screen.width / 2;
+        : app.screen.width / 2);
 
-    const y = -(bounds.y + bounds.height) - 1;
+    const y = position?.y ?? -(bounds.y + bounds.height) - 1;
 
     shape.position.set(x, y);
     shapesContainer.addChild(shape);
@@ -130,8 +144,8 @@ async function init(): Promise<void> {
       velocityY: 0,
     });
 
-    // Removes the clicked shape and prevents the event from bubbling.
-    shape.on("pointertap", (event) => {
+    // Removes the pressed shape and prevents scene creation.
+    shape.on("pointerdown", (event) => {
       event.stopPropagation();
       removeShape(shape);
     });
