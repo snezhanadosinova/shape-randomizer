@@ -15,8 +15,8 @@ Interactive falling shapes built with **TypeScript, PixiJS, Vite, and Docker**.
 | Remove shapes below the scene                      | Done                         | Ticker calls `removeShape()`                          |
 | Create a shape at the pointer position             | Done                         | Stage `pointerdown` calls `createShape(position)`     |
 | Remove a pressed shape                             | Done                         | Shape `pointerdown` calls `removeShape()`             |
-| Display visible shape count using HTML             | Done                         | `updateShapeCount()`                                  |
-| Display occupied surface area                      | Not implemented              | —                                                     |
+| Display visible shape count using HTML             | Done                         | `updateShapeStats()`                                  |
+| Display total area of visible shapes               | Done, with limitations below | `updateShapeStats()` sums each shape’s `getArea()`    |
 | Generate random irregular shapes                   | Not implemented              | —                                                     |
 | HTML controls for gravity and generation frequency | Not implemented              | —                                                     |
 | Object-oriented design                             | Done                         | Abstract `Shape` class and concrete subclasses        |
@@ -83,8 +83,9 @@ The values displayed below the canvas are currently static HTML, not interactive
 
 ## Known Limitations
 
-- Surface area calculation is not implemented.
+- Visibility is determined using bounding-box intersection.
+- The area statistic sums the full geometric areas of shapes considered visible, including portions outside the mask.
+- Overlapping areas are counted separately for each shape.
 - Random irregular shape generation is not implemented.
 - Gravity and generation frequency controls are not implemented.
-- Visible shape counting uses bounding-box intersection.
 - Mobile behavior was manually tested on one phone; broader testing is pending.
