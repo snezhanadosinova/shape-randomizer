@@ -173,7 +173,11 @@ async function init(): Promise<void> {
 
   updateGravityControls();
 
-  const creationInterval = 1;
+  let shapesPerSecond = 1;
+
+  const minShapesPerSecond = 1;
+  const maxShapesPerSecond = 10;
+
   let timeSinceLastCreation = 0;
 
   // Creates a shape at the given position or randomly above the scene.
@@ -207,15 +211,58 @@ async function init(): Promise<void> {
     });
   }
 
+  const numberOfShapes =
+    document.querySelector<HTMLSpanElement>("#numberOfShapes");
+
+  const decreaseShapes =
+    document.querySelector<HTMLButtonElement>("#decreaseShapes");
+
+  const increaseShapes =
+    document.querySelector<HTMLButtonElement>("#increaseShapes");
+
+  if (!numberOfShapes || !decreaseShapes || !increaseShapes) {
+    throw new Error("Missing shape generation controls");
+  }
+
+  // Displays the generation rate and updates button availability.
+  const updateShapeControls = (): void => {
+    numberOfShapes.textContent = String(shapesPerSecond);
+
+    decreaseShapes.disabled = shapesPerSecond <= minShapesPerSecond;
+    increaseShapes.disabled = shapesPerSecond >= maxShapesPerSecond;
+  };
+
+  decreaseShapes.addEventListener("click", () => {
+    shapesPerSecond = Math.max(minShapesPerSecond, shapesPerSecond - 1);
+    timeSinceLastCreation = 0;
+    updateShapeControls();
+  });
+
+  increaseShapes.addEventListener("click", () => {
+    shapesPerSecond = Math.min(maxShapesPerSecond, shapesPerSecond + 1);
+    timeSinceLastCreation = 0;
+    updateShapeControls();
+  });
+
+  updateShapeControls();
+
   // Generates shapes at regular intervals and updates their movement.
   app.ticker.add((ticker) => {
     const deltaSeconds = ticker.deltaMS / 1000;
 
-    timeSinceLastCreation += deltaSeconds;
+    // Pauses automatic generation when new shapes cannot start falling.
+    if (gravity > 0) {
+      timeSinceLastCreation += deltaSeconds;
 
-    while (timeSinceLastCreation >= creationInterval) {
-      createShape();
-      timeSinceLastCreation -= creationInterval;
+      const creationInterval = 1 / shapesPerSecond;
+
+      while (timeSinceLastCreation >= creationInterval) {
+        createShape();
+        timeSinceLastCreation -= creationInterval;
+      }
+    } else {
+      // Prevents accumulated time from creating a burst after resuming.
+      timeSinceLastCreation = 0;
     }
 
     // Updates movement and removes shapes below the scene.
