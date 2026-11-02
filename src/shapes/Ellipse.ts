@@ -19,6 +19,12 @@ export class Ellipse extends Shape {
     this.draw();
   }
 
+  // Returns the ellipse area in square pixels.
+  // Area = π × radiusX × radiusY, using the two semi-axes.
+  public override getArea(): number {
+    return Math.PI * this.radiusX * this.radiusY;
+  }
+
   // Redraws the ellipse around its local origin.
   protected override draw(): void {
     this.clear();

@@ -16,6 +16,12 @@ export class Circle extends Shape {
     this.draw();
   }
 
+  // Returns the circle area in square pixels.  
+  // Area = π × r², where r is the circle's radius.
+  public override getArea(): number {
+    return Math.PI * this.radius ** 2;
+  }
+
   // Redraws the circle around its local origin.
   protected override draw(): void {
     this.clear();

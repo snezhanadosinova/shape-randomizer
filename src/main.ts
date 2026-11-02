@@ -69,11 +69,21 @@ async function init(): Promise<void> {
   // Keeps the validated element reference for use in callbacks.
   const currentNumberElement = currentNumber;
 
+  // Displays the total area of all shapes currently in the scene.
+  const currentArea = document.querySelector<HTMLSpanElement>("#currentArea");
+
+  if (!currentArea) {
+    throw new Error('Missing element "#currentArea"');
+  }
+
+  const currentAreaElement = currentArea;
+
   const fallingShapes: FallingShape[] = [];
 
-  // Displays the number of shapes intersecting the visible scene.
-  function updateShapeCount(): void {
+  // Updates the count and total area of shapes intersecting the scene.
+  function updateShapeStats(): void {
     let visibleCount = 0;
+    let totalArea = 0;
 
     for (const { shape } of fallingShapes) {
       const bounds = shape.getLocalBounds();
@@ -91,13 +101,22 @@ async function init(): Promise<void> {
 
       if (isVisible) {
         visibleCount++;
+
+        // Includes each visible shape's full area.
+        // Masked portions are included; overlaps are counted separately.
+        totalArea += shape.getArea();
       }
     }
 
-    const text = String(visibleCount);
+    const countText = String(visibleCount);
+    const areaText = totalArea.toFixed(0);
 
-    if (currentNumberElement.textContent !== text) {
-      currentNumberElement.textContent = text;
+    if (currentNumberElement.textContent !== countText) {
+      currentNumberElement.textContent = countText;
+    }
+
+    if (currentAreaElement.textContent !== areaText) {
+      currentAreaElement.textContent = areaText;
     }
   }
 
@@ -113,7 +132,7 @@ async function init(): Promise<void> {
     shape.removeFromParent();
     shape.destroy();
 
-    updateShapeCount();
+    updateShapeStats();
   }
 
   const gravity = 180;
@@ -177,7 +196,7 @@ async function init(): Promise<void> {
       }
     }
 
-    updateShapeCount();
+    updateShapeStats();
   });
 
   createShape();

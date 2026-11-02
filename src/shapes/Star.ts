@@ -31,6 +31,19 @@ export class Star extends Shape {
     this.draw();
   }
 
+  // Returns the area of the star with alternating outer and inner vertices.
+  // Area = n × outerRadius × innerRadius × sin(π / n),
+  // where n is the number of star points.
+  // Derived by splitting the star into 2n triangles around its center.
+  public override getArea(): number {
+    return (
+      this.points *
+      this.radius *
+      this.innerRadius *
+      Math.sin(Math.PI / this.points)
+    );
+  }
+
   protected override draw(): void {
     this.clear();
     this.star(

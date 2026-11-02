@@ -1,5 +1,6 @@
 import { Shape } from "./Shape";
 import type { ShapeOptions } from "./ShapeOptions";
+import { getPolygonArea } from "../utils/geometry";
 
 interface PolygonOptions extends ShapeOptions {
   points: number[];
@@ -17,6 +18,15 @@ export class Polygon extends Shape {
     this.points = [...points];
     this.close = close;
     this.draw();
+  }
+
+  // Returns the polygon area in square pixels.
+  // Uses the shoelace formula:
+  // Area = ½ × |Σ(xᵢ × yᵢ₊₁ − xᵢ₊₁ × yᵢ)|.
+  // Vertices must follow the polygon boundary without self-intersections.
+  // The last vertex is connected back to the first.
+  public override getArea(): number {
+    return getPolygonArea(this.points);
   }
 
   // Redraws the polygon using its local vertex coordinates.

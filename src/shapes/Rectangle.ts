@@ -19,6 +19,12 @@ export class Rectangle extends Shape {
     this.draw();
   }
 
+  // Returns the rectangle area in square pixels.
+  // Area = width × height.
+  public override getArea(): number {
+    return this.shapeWidth * this.shapeHeight;
+  }
+
   // Redraws the rectangle around its local origin.
   protected override draw(): void {
     this.clear();

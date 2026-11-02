@@ -15,6 +15,9 @@ export abstract class Shape extends Graphics {
     this.cursor = "pointer";
   }
 
+// Returns the full geometric area of the shape in square pixels.
+public abstract getArea(): number;
+
   // Each shape defines its own drawing implementation.
   protected abstract draw(): void;
 }
