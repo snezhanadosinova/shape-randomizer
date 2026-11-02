@@ -135,7 +135,44 @@ async function init(): Promise<void> {
     updateShapeStats();
   }
 
-  const gravity = 180;
+  let gravity = 180;
+
+  const gravityStep = 30;
+  const minGravity = 0;
+  const maxGravity = 720;
+
+  const gravityValue = document.querySelector<HTMLSpanElement>("#gravityValue");
+
+  const decreaseGravity =
+    document.querySelector<HTMLButtonElement>("#decreaseGravity");
+
+  const increaseGravity =
+    document.querySelector<HTMLButtonElement>("#increaseGravity");
+
+  if (!gravityValue || !decreaseGravity || !increaseGravity) {
+    throw new Error("Missing gravity controls");
+  }
+
+  // Updates the value and prevents changes beyond the allowed range.
+  const updateGravityControls = (): void => {
+    gravityValue.textContent = String(gravity);
+
+    decreaseGravity.disabled = gravity <= minGravity;
+    increaseGravity.disabled = gravity >= maxGravity;
+  };
+
+  decreaseGravity.addEventListener("click", () => {
+    gravity = Math.max(minGravity, gravity - gravityStep);
+    updateGravityControls();
+  });
+
+  increaseGravity.addEventListener("click", () => {
+    gravity = Math.min(maxGravity, gravity + gravityStep);
+    updateGravityControls();
+  });
+
+  updateGravityControls();
+
   const creationInterval = 1;
   let timeSinceLastCreation = 0;
 

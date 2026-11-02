@@ -105,8 +105,21 @@ button:hover {
   background-color: #5c646e;
 }
 
+button:disabled {
+  opacity: 0.4;
+  cursor:not-allowed;
+}
+
 .title {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
+}
+
+.control-hint {
+  max-width: 320px;
+  margin: 0.5rem 0 0;
+  color: #b1b6bd;
+  font-size: 0.75rem;
+  line-height: 1.4;
 }
