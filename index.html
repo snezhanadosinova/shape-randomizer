@@ -12,24 +12,69 @@
       area to create a shape, or a shape to remove it.
     </p>
     <div class="flex-section">
-      <div>
+      <div class="rounded-border">
         <span>Number of current shapes:</span>
         <span id="currentNumber" class="number">0</span>
       </div>
-      <div>
+      <div class="rounded-border">
         <span>Surface area occupied by shapes:</span>
-        <span id="currentArea" class="number">not implemented</span>
+        <span id="currentArea" class="number">0</span>
         <span class="number">px²</span>
       </div>
     </div>
     <main id="scene"></main>
 
     <div class="flex-section">
-      <div>
-        <span> Number of shapes per second: </span>
-        <span class="number">1</span>
+      <div class="rounded-border">
+        <div class="title">
+          <span>Number of shapes per second</span>
+        </div>
+
+        <div class="shape-control">
+          <button
+            id="decreaseShapes"
+            type="button"
+            aria-label="Decrease shapes per second"
+          >
+            −
+          </button>
+
+          <span id="numberOfShapes" class="number">1</span>
+
+          <button
+            id="increaseShapes"
+            type="button"
+            aria-label="Increase shapes per second"
+          >
+            +
+          </button>
+        </div>
       </div>
-      <div><span>Gravity value:</span> <span class="number">180</span></div>
+      <div class="rounded-border">
+        <div class="title">
+          <span>Gravity value</span>
+          <span>(px/s²)</span>
+        </div>
+
+        <div class="gravity-control">
+          <button
+            id="decreaseGravity"
+            type="button"
+            aria-label="Decrease gravity"
+          >
+            −
+          </button>
+          <span id="gravityValue" class="number">180</span>
+
+          <button
+            id="increaseGravity"
+            type="button"
+            aria-label="Increase gravity"
+          >
+            +
+          </button>
+        </div>
+      </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

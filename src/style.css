@@ -59,10 +59,13 @@ canvas {
 }
 
 .flex-section div {
-  border: 1px solid #b6b6b6;
-  border-radius: 0.25rem;
   padding: 0.5rem;
   font-size: 0.85rem;
+}
+
+.rounded-border {
+  border: 1px solid #b6b6b6;
+  border-radius: 0.25rem;
 }
 
 .number {
@@ -75,4 +78,35 @@ canvas {
   .flex-section {
     flex-direction: row;
   }
+}
+
+.gravity-control,
+.shape-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gravity-control button,
+.shape-control button {
+  min-width: 2rem;
+  min-height: 2rem;
+  border: 1px solid #b6b6b6;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: white;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #5c646e;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
